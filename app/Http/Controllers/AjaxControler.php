@@ -37,8 +37,7 @@ class AjaxControler extends Controller
             $registro->delete();
             return response()->json($registro->toArray(),200);
         }catch (\Illuminate\Database\QueryException $e) {
-            return response()->json( ["error" => $e->getMessage() ] ,500);
-            
+            return response()->json( ["error" => $e->getMessage() ] ,500);       
         }
     }
 }
