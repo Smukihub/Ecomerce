@@ -38,6 +38,7 @@ class AjaxControler extends Controller
             return response()->json($registro->toArray(),200);
         }catch (\Illuminate\Database\QueryException $e) {
             return response()->json( ["error" => $e->getMessage() ] ,500);
+            
         }
     }
 }
