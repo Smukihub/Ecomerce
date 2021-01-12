@@ -110,7 +110,7 @@ $().ready( function(){
                 if(error.response.status==401)alert("Usted no ha iniciado en el sistema");
                 if(error.response.status==500)alert(error.response.data.message);
                 else alert(error.response.data.error);
-                console.log(error);//cambios
+                console.log(error);
             });
         }
     });
