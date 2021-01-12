@@ -38,7 +38,7 @@ Route::resource('Preguntas', 'PreguntasControler', [
 ]);
 Route::get('Preguntar/{producto}','PreguntasControler@create');
 
-//  rutas para llamar por ajax
+//  rutas  para  llamar por ajax
 Route::put('_Usuarios/{id}','AjaxControler@updateUsuario');
 Route::post('_Categorias','AjaxControler@storeCategoria');
 Route::delete('_Categorias/{id}','AjaxControler@destroyCategoria');
