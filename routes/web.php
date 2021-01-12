@@ -43,3 +43,4 @@ Route::put('_Usuarios/{id}','AjaxControler@updateUsuario');
 Route::post('_Categorias','AjaxControler@storeCategoria');
 Route::delete('_Categorias/{id}','AjaxControler@destroyCategoria');
 
+//cambios
