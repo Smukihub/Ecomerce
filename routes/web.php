@@ -29,6 +29,11 @@ Route::put('Categorias/{categoria}','CategoriasControler@update');
 Route::delete('Categorias/{categoria}','CategoriasControler@destroy');
 Route::get('Categorias/{categoria}/edit','CategoriasControler@edit');
 Route::resource('Usuarios','UsuariosControler');
+Route::post('Productos/fotos','ProductosControler@createImagen');
+Route::put('Productos/fotos/{foto}','ProductosControler@updateImagen');
+Route::delete('Productos/fotos/{foto}','ProductosControler@deleteImagen');
+Route::get('Productos/comprar/{producto}','ProductosControler@comprar');
+Route::get('Productos/carrito','UsuariosControler@carrito');
 Route::resource('Productos','ProductosControler');
 Route::resource('Revisiones', 'RevisarControler', [
     'only' => ['index', 'show', 'update']

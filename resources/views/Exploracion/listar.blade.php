@@ -23,7 +23,7 @@
                   @csrf
                   <input type="search" class="form-control" name="cad" placeholder="Buscar..."  autocomplete="off" spellcheck="false" role="combobox" value="{{$cad}}">
                 </form>
-              </div>          
+              </div>
           </p>
           @endguest
 
@@ -47,10 +47,11 @@
             <p class="card-text">
               <p>{{$producto->nombre}}</p>
               <p>{{$producto->descripcion}}</p>
-              
+
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group">
-                <a class="btn btn-lg btn-outline-secondary" href="/Productos/{{$producto->id}}">Ver mas</a>   
+                <a class="btn btn-lg btn-outline-secondary" href="/Productos/{{$producto->id}}">Ver mas</a>
+                <a class="btn btn-lg btn-outline-primary" href="/Productos/comprar/{{$producto->id}}">Comprar</a>
               </div>
             </div>
 
@@ -58,7 +59,7 @@
         </div>
       </div>
     @empty
-      No hay productos para mostrar.    
+      No hay productos para mostrar.
     @endforelse
   </div>
   </div>

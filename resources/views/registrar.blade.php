@@ -33,6 +33,6 @@
         <label for="password2">Repita el password:</label>
         <input id="password2" type="password" name="password2" class="form-control">
     </div>
-    <input type="submit" class="btn btn-primary" value="Registrarse">    
+    <input type="submit" class="btn btn-primary" value="Registrarse">
 </form>
 @endsection

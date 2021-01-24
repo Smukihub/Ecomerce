@@ -30,4 +30,13 @@ class Usuario extends Authenticatable
         ->whereNotNull('r_autorizada')
         ->get();
     }
+    public function pagos(){
+        return $this->hasMany('App\Models\Pago','paga_id', 'id');
+    }
+    public function cobros(){
+        return $this->hasMany('App\Models\Pago','recibe_id', 'id');
+    }
+    public function compras(){
+        return $this->hasMany('App\Models\Venta');
+    }
 }

@@ -14,16 +14,16 @@ use App\Models\Categoria;
 class AutenticarControler extends Controller
 {
     public function autenticar(){
-        return view('autenticar'); 
+        return view('autenticar');
     }
     public function registrar(){
-        return view('registrar'); 
+        return view('registrar');
     }
     public function salir(){
         Auth::logout();
         return redirect('/');
     }
-    
+
     public function agregar(Request $request)
     {
 
@@ -35,7 +35,7 @@ class AutenticarControler extends Controller
         if(!is_null($imagen)){
             $ruta_destino = public_path('fotos/');
             $nombre_de_archivo = $imagen->getClientOriginalName();
-            $imagen->move($ruta_destino, $nombre_de_archivo);        
+            $imagen->move($ruta_destino, $nombre_de_archivo);
             $valores['imagen']=$nombre_de_archivo;
         }
         $valores['rol']="Cliente";
@@ -64,6 +64,6 @@ class AutenticarControler extends Controller
             }else
                 return redirect('/autenticar')->with('error', 'Usuario no registrado');
         }
-        
+
     }
 }

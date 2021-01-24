@@ -31,8 +31,8 @@
     </div>
 
     <div class="form-group">
-        <label for="imagen">Imagen:</label>
-        <input type="file" name="imagen" id="imagen">
+        <label for="imagen">Imagenes:</label>
+        <input type="file" name="imagen[]" multiple id="imagen">
     </div>
 
 
@@ -43,13 +43,13 @@
             <option value="{{$categoria->id}}">{{$categoria->nombre}}</option>
         @endforeach
       </select>
-  </div>  
+  </div>
 
 
 
     <input type="submit" class="btn btn-primary" value="Enviar">
 </form>
 
-  
+
 
 @endsection

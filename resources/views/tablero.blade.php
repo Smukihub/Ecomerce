@@ -73,7 +73,7 @@
     </div>
       @break
     @case('Contador')
-        dash del Contador    
+        dash del Contador
         @break
     @case('Cliente')
     <div class="card-columns">
@@ -103,13 +103,13 @@
               </p>
             </div>
         </div>
-  
-        
+
+
     </div>
       @break
-    
+
 @endswitch
 
-        
+
 
 @endsection

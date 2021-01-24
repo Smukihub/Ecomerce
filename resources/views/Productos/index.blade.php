@@ -27,7 +27,7 @@
 @endif
 
 @can('create', App\Models\Producto::class)
-   <a href="Productos/create" class="btn btn-primary form-control" >Proponer</a>    
+   <a href="Productos/create" class="btn btn-primary form-control" >Proponer</a>
 @endcan
 
 <table border="1" class="table table-striped">
@@ -39,16 +39,21 @@
 <tbody class="thead-light">
     @forelse ($productos as $producto)
         <tr @if (is_null($producto->concesionado))
-                class="bg-dark text-white"            
+                class="bg-dark text-white"
             @else
                 @if ($producto->concesionado==0)
-                    class="text-warning" 
+                    class="text-warning"
                 @else
-                    class="text-success"                
+                    class="text-success"
                 @endif
             @endif
         >
-            <td>{{$producto->nombre}} <img src="/prods/{{$producto->imagen}}" width="50" ></td>
+            <td>
+                {{$producto->nombre}}
+                @foreach($producto->fotos as $foto)
+                    <img src="/prods/{{$foto->imagen}}" width="50">
+                @endforeach
+            </td>
             <td style="text-align:right">$ {{$producto->precio}}</td>
             <td>
                 <a href="/Productos/{{$producto->id}}/edit" class="btn btn-success">Editar</a>
@@ -67,14 +72,14 @@
             <td colspan="3">Sin productos registrados</td>
         </tr>
     @endforelse
-</tbody> 
+</tbody>
 </table>
 
 <table border="1">
     <tr>
         <td>NOMENCLATURA</td>
     </tr>
-    
+
     <tr class="bg-dark text-white">
         <td>producto nuevo que fue propuesto pero no ha sido revisado</td>
     </tr>

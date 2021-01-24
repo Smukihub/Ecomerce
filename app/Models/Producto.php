@@ -9,7 +9,7 @@ class Producto extends Model
 {
     public $timestamps = false;
     protected $fillable = ['nombre','descripcion','precio','imagen','usuario_id','categoria_id','concesionado','motivo'];
-    
+
     public function propietario(){
         return $this->hasOne('App\Models\Usuario','id','usuario_id');
     }
@@ -23,13 +23,19 @@ class Producto extends Model
     }
 
     public function estaConcesionado(){
-        if($this->concesionado) 
+        if($this->concesionado)
             return "SI";
         else
             return "No";
     }
 
     public function usuario(){
-        return $this->belongsTo('App\Models\Usuario');        
+        return $this->belongsTo('App\Models\Usuario');
+    }
+    public function fotos(){
+        return $this->hasMany('App\Models\Foto');
+    }
+    public function ventas(){
+        return $this->hasMany('App\Models\Venta');
     }
 }

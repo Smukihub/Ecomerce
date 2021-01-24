@@ -21,7 +21,7 @@ class UsuariosControler extends Controller
 
         $usuarios = Usuario::all();
 
-        /*Aqui podemos hacer algunas cosas, como seleccionar que usuarios son los que cumplen cierta 
+        /*Aqui podemos hacer algunas cosas, como seleccionar que usuarios son los que cumplen cierta
         condicion y los listaremos por ejemplo*/
 
         return view('Usuarios.index',compact('usuarios'));
@@ -54,7 +54,7 @@ class UsuariosControler extends Controller
         if(!is_null($imagen)){
             $ruta_destino = public_path('fotos/');
             $nombre_de_archivo = $imagen->getClientOriginalName();
-            $imagen->move($ruta_destino, $nombre_de_archivo);        
+            $imagen->move($ruta_destino, $nombre_de_archivo);
             $valores['imagen']=$nombre_de_archivo;
         }
 
@@ -65,7 +65,7 @@ class UsuariosControler extends Controller
         $registro->save();
 
         return redirect("/Usuarios")->with('mensaje','Usuario agregado correctamente');
-        
+
     }
 
     /**
@@ -106,7 +106,7 @@ class UsuariosControler extends Controller
         if(isset($valores['password2']))
             if ($valores['password']!=$valores['password2'])
                 return redirect()->back()->with('error','El password no esta bien confirmado');
-    
+
 
         if(isset($valores['password']))
         //si el password esta en blanco no lo actualizaremos
@@ -119,7 +119,7 @@ class UsuariosControler extends Controller
         if(!is_null($imagen)){
             $ruta_destino = public_path('fotos/');
             $nombre_de_archivo = $imagen->getClientOriginalName();
-            $imagen->move($ruta_destino, $nombre_de_archivo);        
+            $imagen->move($ruta_destino, $nombre_de_archivo);
             $valores['imagen']=$nombre_de_archivo;
         }
 
@@ -149,6 +149,12 @@ class UsuariosControler extends Controller
         }catch (\Illuminate\Database\QueryException $e) {
             return redirect("/Usuarios")->with('error',$e->getMessage());
         }
-       
+
+    }
+    public function carrito(){
+        $user = auth()->user();
+        return view('Productos.carrito',[
+            'ventas'=> $user->compras
+        ]);
     }
 }

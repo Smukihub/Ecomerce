@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Producto;
 use App\Models\Categoria;
+use App\Models\Foto;
+use App\Models\Venta;
+use Carbon\Carbon;
 
 class ProductosControler extends Controller
 {
@@ -23,7 +26,7 @@ class ProductosControler extends Controller
         if(Auth::user()->rol=="Supervisor") $productos = Producto::all();
         else $productos = Producto::where('usuario_id',Auth::id())->get();
 
-        /*Aqui podemos hacer algunas cosas, como seleccionar que productos son los que cumplen cierta 
+        /*Aqui podemos hacer algunas cosas, como seleccionar que productos son los que cumplen cierta
         condicion y los listaremos por ejemplo*/
 
         return view('Productos.index',compact('productos'));
@@ -49,23 +52,26 @@ class ProductosControler extends Controller
      */
     public function store(Request $request)
     {
-        $valores = $request->all();
-        $imagen = $request->file('imagen');
-        if(!is_null($imagen)){
-            $ruta_destino = public_path('prods/');
-            $nombre_de_archivo = $imagen->getClientOriginalName();
-            $imagen->move($ruta_destino, $nombre_de_archivo);        
-            $valores['imagen']=$nombre_de_archivo;
-        }
+        $valores = $request->except(['imagen']);
 
         $valores['usuario_id']=Auth::id();
+        $producto = Producto::create($valores);
 
-        $registro = new Producto();
-        $registro->fill($valores);
-        $registro->save();
-
+        $imagen = $request->file('imagen');
+        if(!is_null($imagen)){
+            foreach ($imagen as $img) {
+                $ruta_destino = public_path('prods/');
+                $nombre_de_archivo = $img->getClientOriginalName();
+                $img->move($ruta_destino, $nombre_de_archivo);
+                // $valores['imagen']=$nombre_de_archivo;
+                Foto::create([
+                    'imagen'=>$nombre_de_archivo,
+                    'producto_id'=>$producto->id
+                ]);
+            }
+        }
         return redirect("/Productos")->with('mensaje','Producto agregado correctamente');
-        
+
     }
 
     /**
@@ -102,25 +108,75 @@ class ProductosControler extends Controller
      */
     public function update(Request $request, $id)
     {
-        $valores = $request->all();
-        $imagen = $request->file('imagen');
-        if(!is_null($imagen)){
-            $ruta_destino = public_path('fotos/');
-            $nombre_de_archivo = $imagen->getClientOriginalName();
-            $imagen->move($ruta_destino, $nombre_de_archivo);        
-            $valores['imagen']=$nombre_de_archivo;
-        }
         $valores['usuario_id']=Auth::id();
         $registro = Producto::find($id);
-        if($registro->concesionado==0)$registro->concesionado=null;
-        $registro->fill($valores);
-        $registro->save();
+
+        $valores = $request->except(['imagen','concesionado']);
+        $imagen = $request->file('imagen');
+        if(!is_null($imagen)){
+            foreach ($imagen as $img) {
+                $ruta_destino = public_path('fotos/');
+                $nombre_de_archivo = $img->getClientOriginalName();
+                $img->move($ruta_destino, $nombre_de_archivo);
+                $valores['imagen']=$nombre_de_archivo;
+                Foto::create([
+                    'imagen'=>$nombre_de_archivo,
+                    'producto_id'=>$registro->id
+                ]);
+            }
+        }
+        $registro->update($valores);
+
+        // if($registro->concesionado==0)$registro->concesionado=null;
+        // $registro->fill($valores);
+        // $registro->save();
 
 
         return redirect("/Productos")->with('mensaje','Producto modificado correctamente');
 
     }
-   //    return;
+
+    public function updateImagen(Request $request, Foto $foto){
+        if($foto->producto->concesionado == NULL || $foto->producto->concesionado == 0){
+            $img = $request->file('imagen');
+            $ruta_destino = public_path('prods/');
+            $nombre_de_archivo = $img->getClientOriginalName();
+            $img->move($ruta_destino, $nombre_de_archivo);
+            $foto->update([
+                'imagen'=>$nombre_de_archivo
+            ]);
+            return redirect('/Productos')->with('mensaje','Imagen Actualizada');
+        } else {
+            return redirect('/Productos')->with('mensaje','Producto concesionado no se puede actualizar!');
+        }
+    }
+    public function deleteImagen(Foto $foto){
+        if($foto){
+            $foto->delete();
+            return redirect('/Productos')->with('mensaje','Foto Eliminada');
+        }else{
+            return redirect('/Productos')->with('mensaje','Foto NO Existe');
+        }
+    }
+    public function createImagen(Request $request){
+        $imagen = $request->file('imagen');
+        if(!is_null($imagen)){
+            foreach ($imagen as $img) {
+                $ruta_destino = public_path('prods/');
+                $nombre_de_archivo = $img->getClientOriginalName();
+                $img->move($ruta_destino, $nombre_de_archivo);
+                // $valores['imagen']=$nombre_de_archivo;
+                Foto::create([
+                    'imagen'=>$nombre_de_archivo,
+                    'producto_id'=>$request->producto_id
+                ]);
+            }
+            return redirect('/Productos')->with('mensaje','Fotos Agregadas');
+        }else {
+            return redirect('/Productos')->with('mensaje','Error al agregar las fotos');
+        }
+
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -138,6 +194,14 @@ class ProductosControler extends Controller
         }catch (\Illuminate\Database\QueryException $e) {
             return redirect("/Productos")->with('error',$e->getMessage());
         }
-       
+
+    }
+    public function comprar(Producto $producto){
+        Venta::create([
+            'usuario_id'=>auth()->user()->id,
+            'referencia'=>Carbon::now()->format('Ymd').'-'.auth()->user()->id,
+            'producto_id'=>$producto->id
+        ]);
+        return redirect("Productos/carrito")->with('mensaje','Se agrego a la lista de compras');
     }
 }

@@ -28,6 +28,6 @@ class CorreoRegistro
      */
     public function handle(UsuarioRegistrado $event)
     {
-        Mail::to('correo@destino.com')->send(new UnUsuarioRegistrado()); 
+        // Mail::to('correo@destino.com')->send(new UnUsuarioRegistrado());
     }
 }

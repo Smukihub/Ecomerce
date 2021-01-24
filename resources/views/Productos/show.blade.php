@@ -27,7 +27,9 @@
 </div>
 <div class="row">
     <div class="col">Imagen:</div>
-    <div class="col bg-light"><img src="/prods/{{$producto->imagen}}" alt="" class="img-thumnail"></div>
+    @foreach($producto->fotos as $foto)
+        <div class="col bg-light"><img src="/prods/{{$foto->imagen}}" alt="" class="img-thumnail" width="200px"></div>
+    @endforeach
     <div class="col"></div>
     <div class="col"></div>
 </div>
@@ -56,7 +58,7 @@
 
 @forelse ($producto->preguntas as $pregunta)
 {{" "}}
-    @if (!is_null($pregunta->p_autorizada))    
+    @if (!is_null($pregunta->p_autorizada))
         <div class="alert alert-info" role="alert">
             {{$pregunta->quien->nombre}} pregunto <small class="text-muted initialism">{{$pregunta->hora_p}}</small> : {{$pregunta->pregunta}}
             @if (!is_null($pregunta->r_autorizada))
@@ -64,7 +66,7 @@
                     {{$pregunta->respuesta}}
                 </div>
             @endif
-        </div>    
+        </div>
     @endif
 @empty
     Se el primero en preguntar....
@@ -73,12 +75,12 @@
 <div class="d-flex justify-content-between align-items-center">
     <div class="btn-group">
         @if (Gate::allows('comprar',$producto))
-            <a class="btn btn-lg btn-outline-success"  href="/Comprar/{{$producto->id}}">Comprar</a>                                     
+            <a class="btn btn-lg btn-outline-success"  href="/Comprar/{{$producto->id}}">Comprar</a>
         @endif
 
         @if (Gate::allows('preguntar',$producto))
-            <a class="btn btn-lg btn-outline-success"  href="/Preguntar/{{$producto->id}}">Preguntar</a>                                     
+            <a class="btn btn-lg btn-outline-success"  href="/Preguntar/{{$producto->id}}">Preguntar</a>
         @endif
     </div>
 </div>
-@endsection 
+@endsection
